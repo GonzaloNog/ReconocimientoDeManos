@@ -28,7 +28,7 @@ public class DrawMultipleLines : MonoBehaviour
     {
         // We draw in the screen only if the draw variable is true.
         // it can be changed when we want to stop drawing
-        if (draw)
+        if (draw && GameManager.instance.getDraw() && GameManager.instance.getChangeColorDraw())
         {
             //Detects if we are switching the state
             if (drawState == DrawState.OFF)
@@ -47,8 +47,9 @@ public class DrawMultipleLines : MonoBehaviour
 
                 //Assigns a material and modifies the properties of the line renderer - you can expose and change this properties
                 lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-                lineRenderer.widthMultiplier = 0.2f;
+                lineRenderer.widthMultiplier = GameManager.instance.getGrosor(); ;//Le pregunto al GameManager de que grosor es la linea
                 lineRenderer.positionCount = 0;
+                lineRenderer.SetColors(GameManager.instance.newColor(), GameManager.instance.newColor());//Le pregunto al GameManager de que color tiene que ser la linea
 
                 //clears the points queue to start with an empty line
                 points.Clear();
@@ -60,6 +61,7 @@ public class DrawMultipleLines : MonoBehaviour
             points.Enqueue(landmark.transform.position);
             lineRenderer.positionCount++;
             lineRenderer.SetPositions(points.ToArray());
+            
         }
         else {
 
@@ -68,6 +70,7 @@ public class DrawMultipleLines : MonoBehaviour
             {
                 drawState = DrawState.OFF;
             }
+            GameManager.instance.setChangeColorDraw(true);//se usa para comprobar si se cambio el color mientras se dibujaba 
         }
     }
 }

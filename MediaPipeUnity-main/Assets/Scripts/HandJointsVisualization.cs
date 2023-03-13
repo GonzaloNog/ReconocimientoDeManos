@@ -8,10 +8,10 @@ public class HandJointsVisualization : MonoBehaviour
     public GameObject landmark;
     public GameObject leftHandGO;
     public GameObject rightHandGO;
-    public float dist;
+    public float dist; //Calcula al distancia entre dos puntos de la mano
     public Vector2 imgAspect;
-    private float time = 0;
-    private bool comand = true;
+    private float time = 0; //Contar el tiempo que transcurre desde que se ejecuto un comando
+    private bool comand = true;// Comprobar si los comandos pueden usarse
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +33,7 @@ public class HandJointsVisualization : MonoBehaviour
                                                                                mediapipeHandsReceiver.handRight[i].z);
 
         }
-//Deteccion de gestos por proximidad de puntos 
+// 1 - Deteccion de gestos por proximidad de puntos (puño cerrado)
         dist = Vector3.Distance(leftHandGO.transform.GetChild(8).transform.position, leftHandGO.transform.GetChild(5).transform.position);
         if (dist < 1 && dist > 0.01f)
         {
@@ -60,6 +60,8 @@ public class HandJointsVisualization : MonoBehaviour
                 }
             }
         }
+        // 1.End 
+        // 2 - Deteccion de gestos por proximidad de puntos (pulgar con idice)
         dist = Vector3.Distance(leftHandGO.transform.GetChild(4).transform.position, leftHandGO.transform.GetChild(12).transform.position);
         //Debug.Log(dist);
         if (dist < 0.6f && dist > 0.01f)
@@ -71,6 +73,8 @@ public class HandJointsVisualization : MonoBehaviour
                 comand = false;
             }
         }
+        // 2.end
+        // 3 - Deteccion de gestos por proximidad de puntos (pulgar con dedo medio)
         dist = Vector3.Distance(leftHandGO.transform.GetChild(4).transform.position, leftHandGO.transform.GetChild(16).transform.position);
         //Debug.Log(dist);
         if (dist < 0.6f && dist > 0.01f)
@@ -82,6 +86,8 @@ public class HandJointsVisualization : MonoBehaviour
                 comand = false;
             }
         }
+        // 3.end
+        // 4 - Deteccion de gestos por proximidad de puntos (pulgar con anular)
         dist = Vector3.Distance(leftHandGO.transform.GetChild(4).transform.position, leftHandGO.transform.GetChild(20).transform.position);
         //Debug.Log(dist);
         if (dist < 0.6f && dist > 0.01f)
@@ -93,6 +99,8 @@ public class HandJointsVisualization : MonoBehaviour
                 comand = false;
             }
         }
+        //4.end
+        //5 - Deteccion de gestos por proximidad de puntos (pulgar con meñique)
         dist = Vector3.Distance(leftHandGO.transform.GetChild(8).transform.position, leftHandGO.transform.GetChild(4).transform.position);
         if (dist < 0.6f && dist > 0.01f)
         {
@@ -103,6 +111,23 @@ public class HandJointsVisualization : MonoBehaviour
                 comand = false;
             }
         }
+        // 6 - Deteccion de gestos por proximidad de puntos (marco)
+        dist = Vector3.Distance(leftHandGO.transform.GetChild(8).transform.position, rightHandGO.transform.GetChild(4).transform.position);
+        if(dist < 0.6f && dist > 0.01f)
+        {
+            dist = Vector3.Distance(leftHandGO.transform.GetChild(4).transform.position, rightHandGO.transform.GetChild(8).transform.position);
+            if (dist < 0.6f && dist > 0.01f)
+            {
+                if (comand)
+                {
+                    GameManager.instance.Screen();//apaga la UI para la foto
+                    comand = false;
+                    leftHandGO.SetActive(false);//apaga los puntos dela mano izquierda
+                    rightHandGO.SetActive(false);// apaga los puntos de la mano derecha
+                }
+            }
+        }
+        //6.End
 
         //Timer permisos entre comandos
         if (!comand)
@@ -112,6 +137,9 @@ public class HandJointsVisualization : MonoBehaviour
             {
                 time = 0;
                 comand = true;
+                GameManager.instance.ScreenOn();//Enciendo de nuevo la UI
+                leftHandGO.SetActive(true);//Enciendo mano izquierda
+                rightHandGO.SetActive(true);//Enciendo mano derecha 
             }
         }
     }
