@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
     public void Screen()//saco una foto de la pantalla se guarda en la carpeta raiz
     {
         ui.setVision(false);
-        ScreenCapture.CaptureScreenshot("screenshot.png");
+        ScreenCapture.CaptureScreenshot("../myDraw.jpg");
         Debug.Log("A screenshot was taken!");
     }
     public void ScreenOn()
